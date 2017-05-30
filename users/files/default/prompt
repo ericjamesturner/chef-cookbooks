@@ -1,0 +1,18 @@
+parse_git_branch() {
+  echo -en "\x1B[0;33m"
+  if git diff-index --quiet HEAD -- > /dev/null 2>&1; then
+    echo -en "\x1B[0;32m"
+  fi
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ [\1]/'
+  echo -en "\x1B[m"
+}
+
+parse_now() {
+  echo -en "\x1B[1;34m"
+  printf `date +'%a.%R'`
+  echo -en "\x1B[m"
+}
+
+
+export PS1="\$(parse_now)\e[0;1;31m  \u@\h\e[0m\$(parse_git_branch)\n\w\$ "
+

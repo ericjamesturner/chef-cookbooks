@@ -1,0 +1,3 @@
+
+default[:purge_users] = []
+

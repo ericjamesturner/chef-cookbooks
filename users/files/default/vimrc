@@ -1,0 +1,125 @@
+syntax on
+set nocompatible              " be iMproved, required
+
+autocmd FileType python set tabstop=8 shiftwidth=4 expandtab softtabstop=4
+autocmd FileType python set formatoptions=crq textwidth=78
+autocmd FileType json set foldmethod=syntax foldnestmax=3 foldlevel=2
+au BufRead,BufNewFile *.json set filetype=json
+
+autocmd BufWritePre *.py,*.rb :%s/\s\+$//e
+
+
+"setlocal spell spelllang=en_us
+
+autocmd BufRead,BufNewFile *.vcl.erb setlocal filetype=vcl.eruby
+
+au BufRead,BufNewFile *.thor,Thorfile set filetype=ruby
+
+au FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
+
+command JSONfmt %!python -m json.tool
+command JSONunfmt silent %s/ \+//|silent %s/\n//g
+colorscheme default
+
+set ts=2 sw=2 et ai
+
+" default the statusline to green when entering Vim
+hi statusline guibg=DarkGrey ctermfg=4 guifg=White ctermbg=9
+
+au InsertEnter * hi statusline guibg=Cyan ctermfg=6 guifg=Black ctermbg=0
+au InsertLeave * hi statusline guibg=DarkGrey ctermfg=4 guifg=White ctermbg=9
+
+" autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=green ctermbg=white
+" autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  guibg=blue ctermbg=white
+
+
+filetype off                  " required
+
+set laststatus=2
+" Broken down into easily includeable segments
+set statusline=%l:%c
+set statusline+=\ %w%h%m%r " Options
+set statusline+=\ %{fugitive\#statusline()} "  Git Hotness
+set statusline+=\ [%{&ff}/%Y]            " filetype
+set statusline+=\ %<%F   " Filename
+
+set cursorline
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+let iCanHazVundle=1
+let vundle_readme=expand('~/.vim/bundle/Vundle.vim/README.md')
+if !filereadable(vundle_readme)
+  echo "Installing Vundle.."
+  echo ""
+  silent !mkdir -p ~/.vim/bundle
+  silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/Vundle.vim
+  let iCanHazVundle=0
+endif
+
+call vundle#begin()
+
+Plugin 'gmarik/Vundle.vim'  " let Vundle manage Vundle, required
+Plugin 'Syntastic'
+Plugin 'elzr/vim-json'
+Plugin 'vim-json-bundle'
+Plugin 'othree/xml.vim'
+Plugin 'Yggdroot/indentLine'
+Plugin 'tpope/vim-fugitive'
+Plugin 'smerrill/vcl-vim-plugin'
+Plugin 'DirDiff.vim'
+Plugin 'AnsiEsc.vim'
+
+if iCanHazVundle == 0
+  echo "Installing Bundles, please ignore key map error messages"
+  echo ""
+  :BundleInstall
+endif
+
+call vundle#end()           " All Plugins before here
+filetype plugin indent on   " required
+let g:indent_guides_auto_colors = 1
+let g:indentLine_char = '∙'
+let g:indentLine_setConceal = 0
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indentLine_enabled = 1
+
+let g:syntastic_enable_signs=1
+let g:syntastic_auto_loc_list=1
+let g:syntastic_error_symbol = '⛔️'
+let g:syntastic_warning_symbol = '🔶'
+let g:indentLine_color_term = 2
+
+let g:syntastic_json_checkers=['jsonlint']
+let g:syntastic_eruby_ruby_quiet_messages = {'regex': 'possibly useless use of a variable in void context'}
+
+map <c-a> :AnsiEsc<enter>
+map <c-i> :IndentLinesToggle<enter>
+map <c-e> :SyntasticReset<enter>
+
+
+let g:syntastic_loc_list_height=4
+
+"
+" Brief help
+" :PluginList          - list configured plugins
+" :PluginInstall(!)    - install (update) plugins
+" :PluginSearch(!) foo - search (or refresh cache first) for foo
+" :PluginClean(!)      - confirm (or auto-approve) removal of unused plugins
+"
+" see :h vundle for more details or wiki for FAQ
+
+
+set modelines=5
+
+function! s:DiffWithSaved()
+  let filetype=&ft
+  diffthis
+  vnew | r # | normal! 1Gdd
+  diffthis
+  exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
+endfunction
+com! DiffSaved call s:DiffWithSaved()
+
+
+
