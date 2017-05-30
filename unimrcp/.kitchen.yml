@@ -1,0 +1,46 @@
+---
+driver:
+  name: vagrant
+  customize:
+    memory: 1024
+
+provisioner:
+  name: chef_solo
+
+platforms:
+  - name: centos-6.5
+  - name: ubuntu-12.04
+    run_list: apt::default
+  - name: ubuntu-10.04
+    run_list: apt::default
+  - name: debian-7.4
+    run_list: apt::default
+
+suites:
+- name: unimrcp
+  run_list: ['recipe[unimrcp]']
+  attributes: {
+    unimrcp: {}
+  }
+- name: flite
+  run_list: ['recipe[unimrcp]']
+  attributes: {
+    unimrcp: {
+      install_flite: true
+    }
+  }
+- name: pocketsphinx
+  run_list: ['recipe[unimrcp]']
+  attributes: {
+    unimrcp: {
+      install_pocketsphinx: true
+    }
+  }
+- name: all
+  run_list: ['recipe[unimrcp]']
+  attributes: {
+    unimrcp: {
+      install_flite: true,
+      install_pocketsphinx: true
+    }
+  }

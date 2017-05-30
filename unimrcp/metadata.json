@@ -1,0 +1,34 @@
+{
+  "name": "unimrcp",
+  "description": "Installs/Configures UniMRCP",
+  "long_description": "# UniMRCP cookbook\n\nThis Chef cookbook installs UniMRCP from source and configures its basic settings.\n\n# Requirements\n\nTested on Ubuntu 12.04, Debian 7.1 & CentOS 6.5.\n\n# Usage\n\nAdd `recipe[unimrcp]` to your node's run list.\n\n# Attributes\n\n* `node['unimrcp']['version']` - the version of UniMRCP to install (default `1.1.0`)\n* `node['unimrcp']['install_dir']` - the directory in which to install UniMRCP (default `/usr/local/unimrcp`)\n* `node['unimrcp']['install_flite']` - wether or not to install the Flite plugin to UniMRCP Server for open-source TTS (default `false`)\n* `node['unimrcp']['install_pocketsphinx']` - wether or not to install the PocketSphinx plugin to UniMRCP Server for open-source ASR (default `false`)\n\n# Recipes\n\n* `unimrcp` - Fetches and installs UniMRCP\n\n# Author\n\n[Ben Langfeld](@benlangfeld)\n",
+  "maintainer": "Mojo Lingo",
+  "maintainer_email": "ops@mojolingo.com",
+  "license": "Apache 2.0",
+  "platforms": {
+    "debian": ">= 7.1",
+    "ubuntu": ">= 10.04",
+    "centos": ">= 6.5"
+  },
+  "dependencies": {
+    "build-essential": ">= 0.0.0"
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+  },
+  "attributes": {
+  },
+  "groupings": {
+  },
+  "recipes": {
+    "unimrcp": "Install UniMRCP"
+  },
+  "version": "1.0.0"
+}
